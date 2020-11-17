@@ -39,7 +39,7 @@ class Patience {
     for (int i = 0; i < 9; i++) {
       if (gameCards[i] == null) {
         gameCards[i] = deck.dealCard();
-        if (i == 8) {
+        if (!gameCards.contains(null)) {
           if (!canMakeMove()) {
             failed = true;
             playing = false;

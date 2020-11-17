@@ -55,6 +55,7 @@ class _MyHomePageState extends State<MyHomePage> {
     game = new Patience(gameWonCallback, gameFailedCallback);
     game.initGame();
     dh.loadTimes();
+    dh.loadCards();
   }
 
   @override
@@ -176,7 +177,7 @@ class _MyHomePageState extends State<MyHomePage> {
         if (game.won) {
           listOfWidgets.add(FittedBox(fit: BoxFit.fitWidth, child: Text("You won!" + ((top10time) ? " You set a new top 10 time!" : ""))));
         } else if (game.failed) {
-          listOfWidgets.add(FittedBox(fit: BoxFit.fitWidth, child: Text("There are no more moves to make :(")));
+          listOfWidgets.add(FittedBox(fit: BoxFit.fitWidth, child: Text("The game is lost with ${game.getCardsLeft()} cards left")));
         } else if (game.playing) {
           listOfWidgets.add(FittedBox(fit: BoxFit.fitWidth, child: Text("Cards left: " + game.getCardsLeft().toString())));
         } else {
@@ -338,22 +339,24 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  void gameFailedCallback() {
+  void gameFailedCallback() async {
     timer.cancel();
+    CardCount c = new CardCount(DateTime.now(), game.getCardsLeft());
+    bool top10 = await dh.saveCard(c);
     this.setState(() {
       paused = false;
     });
-    showFailDialog();
+    showFailDialog(top10);
   }
 
-  showFailDialog() {
+  showFailDialog(bool top10) {
     return showDialog<void>(
       context: context,
       barrierDismissible: true,
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text("You failed"),
-          content: Text("You can make no more moves and there are still cards in the deck so you have lost the game with a total of ${game.getCardsLeft()} cards remaining, restart to try again!"),
+          content: Text("You can make no more moves and there are still cards in the deck so you have lost the game with a total of ${game.getCardsLeft()} cards remaining, restart to try again!" + ((top10) ? " That's one of the fewest 10 remaining cards you've got!" : "")),
           actions: [
             FlatButton(
                 child: Text("OK"),

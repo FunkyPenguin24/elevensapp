@@ -4,6 +4,7 @@ import 'dart:convert' as convert;
 
 class DataHandler {
   List<Entry> times = [];
+  List<CardCount> cards = [];
 
   void loadTimes() async {
     times = [];
@@ -20,6 +21,33 @@ class DataHandler {
     sortTimes();
   }
 
+  saveTimes() async {
+    final savePath = await getApplicationDocumentsDirectory();
+    final file = await File("${savePath.path}/times.json").create(recursive: true);
+    await file.writeAsString(convert.jsonEncode(times));
+  }
+
+  void loadCards() async {
+    cards = [];
+    final loadPath = await getApplicationDocumentsDirectory();
+    final file = await File("${loadPath.path}/cards.json").create(recursive: true);
+    String rawData = await file.readAsString();
+    if (rawData != "" && rawData != null) {
+      List<dynamic> rawList = convert.jsonDecode(rawData);
+      for (int i = 0; i < rawList.length; i++) {
+        CardCount c = CardCount.fromJson(rawList[i]);
+        cards.add(c);
+      }
+    }
+    sortCards();
+  }
+
+  saveCards() async {
+    final savePath = await getApplicationDocumentsDirectory();
+    final file = await File("${savePath.path}/cards.json").create(recursive: true);
+    await file.writeAsString(convert.jsonEncode(cards));
+  }
+
   void sortTimes() {
     bool sorted = false;
     do {
@@ -29,6 +57,21 @@ class DataHandler {
           Entry temp = times[i];
           times[i] = times[i+1];
           times[i+1] = temp;
+          sorted = false;
+        }
+      }
+    } while (!sorted);
+  }
+
+  void sortCards() {
+    bool sorted = false;
+    do {
+      sorted = true;
+      for (int i = 0; i < cards.length-1; i++) {
+        if (cards[i].cardsLeft > cards[i+1].cardsLeft) {
+          CardCount tempCard = cards[i];
+          cards[i] = cards[i+1];
+          cards[i+1] = tempCard;
           sorted = false;
         }
       }
@@ -65,10 +108,22 @@ class DataHandler {
     }
   }
 
-  saveTimes() async {
-    final savePath = await getApplicationDocumentsDirectory();
-    final file = await File("${savePath.path}/times.json").create(recursive: true);
-    await file.writeAsString(convert.jsonEncode(times));
+  Future<bool> saveCard(CardCount c) async {
+    if (cards.length < 10) {
+      cards.add(c);
+      sortCards();
+      await saveCards();
+      return true;
+    } else {
+      if (cards[9].cardsLeft > c.cardsLeft) {
+        cards[9] = c;
+        sortCards();
+        await saveCards();
+        return true;
+      } else {
+        return false;
+      }
+    }
   }
 
 }
@@ -88,6 +143,25 @@ class Entry {
       {
         "date" : dayDone.toString(),
         "time" : time,
+      };
+
+}
+
+class CardCount {
+
+  DateTime dayDone;
+  int cardsLeft;
+
+  CardCount(this.dayDone, this.cardsLeft);
+
+  CardCount.fromJson(Map<String, dynamic> json)
+    : dayDone = DateTime.parse(json["date"]),
+      cardsLeft = json["cards"];
+
+  Map<String, dynamic> toJson() =>
+      {
+        "date" : dayDone.toString(),
+        "cards" : cardsLeft,
       };
 
 }

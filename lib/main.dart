@@ -90,8 +90,8 @@ class _MyHomePageState extends State<MyHomePage> {
             icon: Icon((paused) ? Icons.play_arrow : Icons.pause, color: Colors.black),
           ),
           BottomNavigationBarItem(
-            title: Text("Deal card", style: TextStyle(color: (game.gameCards[8] == null) ? Colors.black : Colors.blueGrey)),
-            icon: Icon(Icons.arrow_upward, color: (game.gameCards[8] == null) ? Colors.black : Colors.blueGrey),
+            title: Text("Deal card", style: TextStyle(color: (game.gameCards.contains(null)) ? Colors.black : Colors.blueGrey)),
+            icon: Icon(Icons.arrow_upward, color: (game.gameCards.contains(null)) ? Colors.black : Colors.blueGrey),
           ),
           BottomNavigationBarItem(
             title: Text("Restart", style: TextStyle(color: Colors.black)),
@@ -113,7 +113,7 @@ class _MyHomePageState extends State<MyHomePage> {
               }
               break;
             case 1:
-              if (game.gameCards[8] == null && game.playing) {
+              if (game.gameCards.contains(null) && game.playing) {
                 this.setState(() {
                   game.playNewCard();
                 });
@@ -151,6 +151,8 @@ class _MyHomePageState extends State<MyHomePage> {
                           if (!game.won && game.playing && started) {
                             if (game.gameCards[(y*3) + x] != null) {
                               cardPressed(game.gameCards[(y*3) + x]);
+                            } else {
+                              game.playNewCardAt((y*3) + x);
                             }
                           }
                         },
@@ -172,11 +174,11 @@ class _MyHomePageState extends State<MyHomePage> {
       ));
       if (y == 0) {
         if (game.won) {
-          listOfWidgets.add(Text("You won!" + ((top10time) ? " You set a new top 10 time!" : "")));
+          listOfWidgets.add(FittedBox(fit: BoxFit.fitWidth, child: Text("You won!" + ((top10time) ? " You set a new top 10 time!" : ""))));
         } else if (game.failed) {
-          listOfWidgets.add(Text("There are no more moves to make :("));
+          listOfWidgets.add(FittedBox(fit: BoxFit.fitWidth, child: Text("There are no more moves to make :(")));
         } else if (game.playing) {
-          listOfWidgets.add(Text("Cards left: " + game.getCardsLeft().toString()));
+          listOfWidgets.add(FittedBox(fit: BoxFit.fitWidth, child: Text("Cards left: " + game.getCardsLeft().toString())));
         } else {
           listOfWidgets.add(Text(""));
         }
@@ -209,12 +211,11 @@ class _MyHomePageState extends State<MyHomePage> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            "Elevens",
+            "Elevens\n",
             style: TextStyle(
               fontSize: 24,
             ),
           ),
-          Text(""),
           Text("Pick 2 non-face cards that add up to eleven to replace them, or a Jack a Queen and a King\n"),
           Text("There may be up to 9 cards on the table at once, when all the cards in the deck are gone you have won\n"),
           Text("If cards remain in the deck but there are no cards that add up to eleven, you have lost"),
@@ -309,7 +310,7 @@ class _MyHomePageState extends State<MyHomePage> {
         builder: (BuildContext context) {
           return AlertDialog(
             title: Text("You won"),
-            content: Text("Congratulations, there are no cards remaining in the deck so you have won the game with a time of ${timeDiff.toString().substring(2, 7)}!" + ((top10) ? " You beat the game in one of your top 10 best times!" : " Press restart to try again and see if you can get one of your top 10 times")),,
+            content: Text("Congratulations, there are no cards remaining in the deck so you have won the game with a time of ${timeDiff.toString().substring(2, 7)}!" + ((top10) ? " You beat the game in one of your top 10 best times!" : " Press restart to try again and see if you can get one of your top 10 times")),
             actions: [
               FlatButton(
                   child: Text("OK"),

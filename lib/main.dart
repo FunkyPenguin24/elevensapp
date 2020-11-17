@@ -153,7 +153,9 @@ class _MyHomePageState extends State<MyHomePage> {
                             if (game.gameCards[(y*3) + x] != null) {
                               cardPressed(game.gameCards[(y*3) + x]);
                             } else {
-                              game.playNewCardAt((y*3) + x);
+                              this.setState(() {
+                                game.playNewCardAt((y*3) + x);
+                              });
                             }
                           }
                         },

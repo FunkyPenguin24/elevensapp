@@ -80,79 +80,74 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       ),
-      bottomNavigationBar: BottomAppBar(
-        color: Colors.green,
-        child: Row(
-          children: [
-            Expanded(
-              child: IconButton(
-                tooltip: "Pause game",
-                icon: Icon((paused) ? Icons.play_arrow : Icons.pause),
-                onPressed: () {
-                  if (started && !game.won && !game.failed) {
-                    this.setState(() {
-                      paused = !paused;
-                      game.playing = !game.playing;
-                    });
-                  }
-                },
-              ),
-            ),
-            Expanded(
-              child: IconButton(
-                tooltip: "Deal new card",
-                icon: Icon(Icons.arrow_upward),
-                color: (game.gameCards[8] == null) ? Colors.black : Colors.blueGrey,
-                onPressed: () {
-                  if (game.gameCards[8] == null && game.playing) {
-                    this.setState(() {
-                      game.playNewCard();
-                    });
-                  }
-                },
-              ),
-            ),
-            Expanded(
-              child: IconButton(
-                tooltip: "Restart",
-                icon: Icon(Icons.refresh),
-                onPressed: () {
-                  if (started) {
-                    chosenCard = null;
-                    this.setState(() {
-                      top10time = false;
-                      timeStarted = DateTime.now();
-                      timer = Timer.periodic(Duration(seconds: 1), (Timer t) {
-                        if (game.playing) {
-                          this.setState(() {
-                            timeDiff = DateTime.now().difference(timeStarted);
-                          });
-                        } else if (paused) {
-                          timeStarted = timeStarted.add(Duration(seconds: 1));
-                        }
+      bottomNavigationBar: BottomNavigationBar(
+        showUnselectedLabels: true,
+        type: BottomNavigationBarType.fixed,
+        backgroundColor: Colors.green,
+        items: [
+          BottomNavigationBarItem(
+            title: Text((paused) ? "Play" : "Pause", style: TextStyle(color: Colors.black)),
+            icon: Icon((paused) ? Icons.play_arrow : Icons.pause, color: Colors.black),
+          ),
+          BottomNavigationBarItem(
+            title: Text("Deal card", style: TextStyle(color: (game.gameCards[8] == null) ? Colors.black : Colors.blueGrey)),
+            icon: Icon(Icons.arrow_upward, color: (game.gameCards[8] == null) ? Colors.black : Colors.blueGrey),
+          ),
+          BottomNavigationBarItem(
+            title: Text("Restart", style: TextStyle(color: Colors.black)),
+            icon: Icon(Icons.refresh, color: Colors.black),
+          ),
+          BottomNavigationBarItem(
+            title: Text("Best times", style: TextStyle(color: Colors.black)),
+            icon: Icon(Icons.table_chart, color: Colors.black),
+          ),
+        ],
+        onTap: (index) {
+          switch (index) {
+            case 0:
+              if (started && !game.won && !game.failed) {
+                this.setState(() {
+                  paused = !paused;
+                  game.playing = !game.playing;
+                });
+              }
+              break;
+            case 1:
+              if (game.gameCards[8] == null && game.playing) {
+                this.setState(() {
+                  game.playNewCard();
+                });
+              }
+              break;
+            case 2:
+              if (started) {
+                chosenCard = null;
+                this.setState(() {
+                  top10time = false;
+                  timeStarted = DateTime.now();
+                  timer = Timer.periodic(Duration(seconds: 1), (Timer t) {
+                    if (game.playing) {
+                      this.setState(() {
+                        timeDiff = DateTime.now().difference(timeStarted);
                       });
-                      game.restart();
-                    });
-                  }
-                },
-              ),
-            ),
-            Expanded(
-              child: IconButton(
-                tooltip: "Best times",
-                icon: Icon(Icons.table_chart),
-                onPressed: () {
-                  if (!game.playing) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => LeaderboardScreen(dh)),
-                    );
-                  }
-                },
-              ),
-            ),
-          ],
-        ),
+                    } else if (paused) {
+                      timeStarted = timeStarted.add(Duration(seconds: 1));
+                    }
+                  });
+                  game.restart();
+                });
+              }
+              break;
+            case 3:
+              if (!game.playing) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => LeaderboardScreen(dh)),
+                );
+              }
+              break;
+          }
+        },
       ),
     );
   }

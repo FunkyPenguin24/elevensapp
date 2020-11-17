@@ -120,31 +120,10 @@ class _MyHomePageState extends State<MyHomePage> {
               }
               break;
             case 2:
-              if (started) {
-                chosenCard = null;
-                this.setState(() {
-                  top10time = false;
-                  timeStarted = DateTime.now();
-                  timer = Timer.periodic(Duration(seconds: 1), (Timer t) {
-                    if (game.playing) {
-                      this.setState(() {
-                        timeDiff = DateTime.now().difference(timeStarted);
-                      });
-                    } else if (paused) {
-                      timeStarted = timeStarted.add(Duration(seconds: 1));
-                    }
-                  });
-                  game.restart();
-                });
-              }
+              restart();
               break;
             case 3:
-              if (!game.playing) {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => LeaderboardScreen(dh)),
-                );
-              }
+              gotoBestTimes();
               break;
           }
         },
@@ -284,6 +263,35 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  void restart() {
+    if (started && !paused) {
+      chosenCard = null;
+      this.setState(() {
+        top10time = false;
+        timeStarted = DateTime.now();
+        timer = Timer.periodic(Duration(seconds: 1), (Timer t) {
+          if (game.playing) {
+            this.setState(() {
+              timeDiff = DateTime.now().difference(timeStarted);
+            });
+          } else if (paused) {
+            timeStarted = timeStarted.add(Duration(seconds: 1));
+          }
+        });
+        game.restart();
+      });
+    }
+  }
+
+  void gotoBestTimes() {
+    if (!game.playing) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => LeaderboardScreen(dh)),
+      );
+    }
+  }
+
   void gameWonCallback() async {
     timer.cancel();
     Entry e = new Entry(DateTime.now(), timeDiff.toString().substring(2, 7));
@@ -291,6 +299,42 @@ class _MyHomePageState extends State<MyHomePage> {
     this.setState(() {
       top10time = top10;
     });
+    showWinDialog(top10);
+  }
+
+  showWinDialog(bool top10) {
+    return showDialog<void>(
+        context: context,
+        barrierDismissible: true,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("You won"),
+            content: Text("Congratulations, there are no cards remaining in the deck so you have won the game with a time of ${timeDiff.toString().substring(2, 7)}!" + ((top10) ? " You beat the game in one of your top 10 best times!" : " Press restart to try again and see if you can get one of your top 10 times")),,
+            actions: [
+              FlatButton(
+                  child: Text("OK"),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  }
+              ),
+              FlatButton(
+                  child: Text("Restart"),
+                  onPressed: () {
+                    Navigator.pop(context);
+                    restart();
+                  }
+              ),
+              FlatButton(
+                  child: Text("Best times"),
+                  onPressed: () {
+                    Navigator.pop(context);
+                    gotoBestTimes();
+                  }
+              ),
+            ],
+          );
+        }
+    );
   }
 
   void gameFailedCallback() {
@@ -298,6 +342,42 @@ class _MyHomePageState extends State<MyHomePage> {
     this.setState(() {
       paused = false;
     });
+    showFailDialog();
+  }
+
+  showFailDialog() {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("You failed"),
+          content: Text("You can make no more moves and there are still cards in the deck so you have lost the game with a total of ${game.getCardsLeft()} cards remaining, restart to try again!"),
+          actions: [
+            FlatButton(
+                child: Text("OK"),
+                onPressed: () {
+                  Navigator.pop(context);
+                }
+            ),
+            FlatButton(
+                child: Text("Restart"),
+                onPressed: () {
+                  Navigator.pop(context);
+                  restart();
+                }
+            ),
+            FlatButton(
+                child: Text("Best times"),
+                onPressed: () {
+                  Navigator.pop(context);
+                  gotoBestTimes();
+                }
+            ),
+          ],
+        );
+      }
+    );
   }
 
   void cardPressed(PCard card) {

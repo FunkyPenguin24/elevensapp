@@ -54,10 +54,12 @@ class LeaderboardScreenState extends State<LeaderboardScreen> with SingleTickerP
   }
 
   Widget getTimesWidget() {
-    return Column(
-      children: [
-        Expanded(
-          child: DataTable(
+    return Padding(
+      padding: EdgeInsets.only(left: 8.0, right: 8.0),
+      child: ListView(
+        shrinkWrap: true,
+        children: [
+          DataTable(
             columns: [
               DataColumn(
                 label: Text(
@@ -101,16 +103,18 @@ class LeaderboardScreenState extends State<LeaderboardScreen> with SingleTickerP
                   ),
             ],
           ),
-        ),
-      ],
+        ],
+      )
     );
   }
 
   Widget getCardsWidget() {
-    return Column(
-      children: [
-        Expanded(
-          child: DataTable(
+    return Padding(
+      padding: EdgeInsets.only(left: 8.0, right: 8.0),
+      child: ListView(
+        shrinkWrap: true,
+        children: [
+          DataTable(
             columns: [
               DataColumn(
                 label: Text(
@@ -154,8 +158,8 @@ class LeaderboardScreenState extends State<LeaderboardScreen> with SingleTickerP
                   ),
             ],
           ),
-        ),
-      ],
+        ],
+      )
     );
   }
 

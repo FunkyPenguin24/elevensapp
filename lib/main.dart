@@ -155,6 +155,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             } else {
                               this.setState(() {
                                 game.playNewCardAt((y*3) + x);
+                                game.checkIfFailed();
                               });
                             }
                           }
@@ -177,17 +178,17 @@ class _MyHomePageState extends State<MyHomePage> {
       ));
       if (y == 0) {
         if (game.won) {
-          listOfWidgets.add(FittedBox(fit: BoxFit.fitWidth, child: Text("You won!" + ((top10time) ? " You set a new top 10 time!" : ""))));
+          listOfWidgets.add(FittedBox(fit: BoxFit.fitHeight, child: Text("You won!" + ((top10time) ? " You set a new top 10 time!" : ""))));
         } else if (game.failed) {
-          listOfWidgets.add(FittedBox(fit: BoxFit.fitWidth, child: Text("The game is lost with ${game.getCardsLeft()} cards left")));
+          listOfWidgets.add(FittedBox(fit: BoxFit.fitHeight, child: Text("The game is lost with ${game.getCardsLeft()} cards left")));
         } else if (game.playing) {
-          listOfWidgets.add(FittedBox(fit: BoxFit.fitWidth, child: Text("Cards left: " + game.getCardsLeft().toString())));
+          listOfWidgets.add(FittedBox(fit: BoxFit.fitHeight, child: Text("Cards left: " + game.getCardsLeft().toString())));
         } else {
           listOfWidgets.add(Text(""));
         }
       }
       if (y == 1) {
-        listOfWidgets.add(Text((timeDiff == null) ? "00:00" : "${timeDiff.toString().substring(2, 7)}"));
+        listOfWidgets.add(FittedBox(fit: BoxFit.fitHeight, child: Text((timeDiff == null) ? "00:00" : "${timeDiff.toString().substring(2, 7)}")));
       }
     }
 
@@ -312,8 +313,8 @@ class _MyHomePageState extends State<MyHomePage> {
         barrierDismissible: true,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text("You won"),
-            content: Text("Congratulations, there are no cards remaining in the deck so you have won the game with a time of ${timeDiff.toString().substring(2, 7)}!" + ((top10) ? " You beat the game in one of your top 10 best times!" : " Press restart to try again and see if you can get one of your top 10 times")),
+            title: Text("Game won!"),
+            content: Text("Congratulations, you beat the game with a time of ${timeDiff.toString().substring(2, 7)}!" + ((top10) ? "\nThat's one of your top 10 best times!" : "\nTry again and see if you can get one of your top 10 times")),
             actions: [
               FlatButton(
                   child: Text("OK"),
@@ -357,8 +358,8 @@ class _MyHomePageState extends State<MyHomePage> {
       barrierDismissible: true,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("You failed"),
-          content: Text("You can make no more moves and there are still cards in the deck so you have lost the game with a total of ${game.getCardsLeft()} cards remaining, restart to try again!" + ((top10) ? " That's one of the fewest 10 remaining cards you've got!" : "")),
+          title: Text("Game lost"),
+          content: Text("You can make no more moves so you have lost the game with a total of ${game.getCardsLeft()} cards remaining, restart to try again!" + ((top10) ? "\nThat's one of the fewest 10 remaining cards you've got!" : "")),
           actions: [
             FlatButton(
                 child: Text("OK"),
@@ -412,7 +413,7 @@ class _MyHomePageState extends State<MyHomePage> {
         chosenCard = card;
       });
     } else {
-      bool passed = game.compareTwoCards(chosenCard.getCard(), card.getCard());
+      bool passed = game.compareTwoCards(chosenCard, card);
       if (passed) {
         this.setState(() {
           game.playNewCardAt(game.gameCards.indexOf(chosenCard));
@@ -454,7 +455,7 @@ class _MyHomePageState extends State<MyHomePage> {
         chosenFaceCard2 = card;
       });
     } else {
-      bool passed = game.compareThreeCards(chosenFaceCard1.getCard(), chosenFaceCard2.getCard(), card.getCard());
+      bool passed = game.compareThreeCards(chosenFaceCard1, chosenFaceCard2, card);
       if (passed) {
         this.setState(() {
           game.playNewCardAt(game.gameCards.indexOf(chosenFaceCard1));

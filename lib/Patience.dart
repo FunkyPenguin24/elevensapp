@@ -39,13 +39,7 @@ class Patience {
     for (int i = 0; i < 9; i++) {
       if (gameCards[i] == null) {
         gameCards[i] = deck.dealCard();
-        if (!gameCards.contains(null)) {
-          if (!canMakeMove()) {
-            failed = true;
-            playing = false;
-            failCallback();
-          }
-        }
+        checkIfFailed();
         return;
       }
     }
@@ -74,7 +68,7 @@ class Patience {
     for (int i = 0; i < 9; i++) {
       for (int j = i; j < 9; j++) {
         if (gameCards[i].getNum() < 11) {
-          if (compareTwoCards(gameCards[i].getCard(), gameCards[j].getCard())) {
+          if (compareTwoCards(gameCards[i], gameCards[j])) {
             return true;
           }
         } else { //if face card
@@ -103,18 +97,13 @@ class Patience {
     }
   }
 
-  bool compareTwoCards(String card1, String card2) {
-    PCard c1 = getCardFromString(card1);
-    PCard c2 = getCardFromString(card2);
-    return (c1.getNum() + c2.getNum()) == 11;
+  bool compareTwoCards(PCard card1, PCard card2) {
+    return (card1.getNum() + card2.getNum()) == 11;
   }
 
-  bool compareThreeCards(String card1, String card2, String card3) {
-    PCard c1 = getCardFromString(card1);
-    PCard c2 = getCardFromString(card2);
-    PCard c3 = getCardFromString(card3);
-    if ((c1.getNum() + c2.getNum() + c3.getNum()) == 36) { //J + Q + K = 11 + 12 + 13 = 36
-      if (c1.getNum() != c2.getNum() && c1.getNum() != c3.getNum() && c2.getNum() != c3.getNum()) {
+  bool compareThreeCards(PCard card1, PCard card2, PCard card3) {
+    if ((card1.getNum() + card2.getNum() + card3.getNum()) == 36) { //J + Q + K = 11 + 12 + 13 = 36
+      if (card1.getNum() != card2.getNum() && card1.getNum() != card3.getNum() && card2.getNum() != card3.getNum()) {
         return true;
       }
     }

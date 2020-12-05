@@ -14,7 +14,7 @@ When you select a successful pair or trilogy of cards, they will be replaced wit
 
 And be quick, the timer is running!
 
-![Game Screenshot](https://github.com/FunkyPenguin24/elevensapp/blob/main/screenshots/screen1.jpg)
-![Game Screenshot](https://github.com/FunkyPenguin24/elevensapp/blob/main/screenshots/screen2.jpg)
-![Game Screenshot](https://github.com/FunkyPenguin24/elevensapp/blob/main/screenshots/screen3.jpg)
-![Game Screenshot](https://github.com/FunkyPenguin24/elevensapp/blob/main/screenshots/screen5.jpg)
+<img src="https://github.com/FunkyPenguin24/elevensapp/blob/main/screenshots/screen1.jpg" alt="Screenshot" width="350">
+<img src="https://github.com/FunkyPenguin24/elevensapp/blob/main/screenshots/screen2.jpg" alt="Screenshot" width="350">
+<img src="https://github.com/FunkyPenguin24/elevensapp/blob/main/screenshots/screen3.jpg" alt="Screenshot" width="350">
+<img src="https://github.com/FunkyPenguin24/elevensapp/blob/main/screenshots/screen5.jpg" alt="Screenshot" width="350">

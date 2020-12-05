@@ -19,4 +19,5 @@ And be quick, the timer is running!
 <img src="https://github.com/FunkyPenguin24/elevensapp/blob/main/screenshots/screen1.jpg" alt="Screenshot" width="350">
 <img src="https://github.com/FunkyPenguin24/elevensapp/blob/main/screenshots/screen2.jpg" alt="Screenshot" width="350">
 <img src="https://github.com/FunkyPenguin24/elevensapp/blob/main/screenshots/screen3.jpg" alt="Screenshot" width="350">
+<img src="https://github.com/FunkyPenguin24/elevensapp/blob/main/screenshots/screen4.jpg" alt="Screenshot" width="350">
 <img src="https://github.com/FunkyPenguin24/elevensapp/blob/main/screenshots/screen5.jpg" alt="Screenshot" width="350">

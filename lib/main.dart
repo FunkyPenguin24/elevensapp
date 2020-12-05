@@ -11,7 +11,7 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -37,18 +37,17 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
 
-  Patience game;
-  PCard chosenCard;
-  PCard chosenFaceCard1;
-  PCard chosenFaceCard2;
-  bool started = false;
-  DateTime timeStarted;
-  Duration timeDiff;
-  Duration timePaused;
-  Timer timer;
-  bool top10time = false;
-  DataHandler dh = new DataHandler();
-  bool paused = false;
+  Patience game; //handles the game mechanics
+  PCard chosenCard; //currently selected card (Card is already an object in flutter so had to call it PCard)
+  PCard chosenFaceCard1; //currently selected face card
+  PCard chosenFaceCard2; //second currently selected face card
+  bool started = false; //if the game has started
+  DateTime timeStarted; //time the game started
+  Duration timeDiff; //difference between the time started and now
+  Timer timer; //times the game
+  bool top10time = false; //if the user's time is in their top 10
+  DataHandler dh = new DataHandler(); //handles loading and saving of data
+  bool paused = false; //if the game is paused
 
   initState() {
     super.initState();
@@ -132,6 +131,7 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  ///Returns the widgets that display the playing cards
   Widget getCardWidget() {
     List<Widget> listOfWidgets = new List<Widget>();
 
@@ -197,6 +197,7 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  ///Returns the current overlay that should be displaying
   Widget getOverlay() {
     if (!started)
       return getStartingOverlay();
@@ -205,6 +206,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return Container();
   }
 
+  ///Returns the starting overlay, a transparent grey background with the game's description on it
   Widget getStartingOverlay() {
     return Container(
       alignment: Alignment.center,
@@ -222,7 +224,8 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           Text("Pick 2 non-face cards that add up to eleven to replace them, or a Jack a Queen and a King\n"),
           Text("There may be up to 9 cards on the table at once, when all the cards in the deck are gone you have won\n"),
-          Text("If cards remain in the deck but there are no cards that add up to eleven, you have lost"),
+          Text("If cards remain in the deck but there are no cards that add up to eleven, you have lost\n"),
+          Text("These rules can also be found on the pause screen"),
           FlatButton(
             child: Text("Start"),
             color: Colors.green,
@@ -248,6 +251,7 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  ///Returns the paused overlay, a fully grey background with "Game Paused" on it
   Widget getPausedOverlay() {
     return Container(
       alignment: Alignment.center,
@@ -258,16 +262,26 @@ class _MyHomePageState extends State<MyHomePage> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            "Game paused",
+            "Game paused\n",
             style: TextStyle(
               fontSize: 24,
             ),
           ),
+          Text(
+            "How to play\n",
+            style: TextStyle(
+              fontSize: 18,
+            ),
+          ),
+          Text("Pick 2 non-face cards that add up to eleven to replace them, or a Jack a Queen and a King\n"),
+          Text("There may be up to 9 cards on the table at once, when all the cards in the deck are gone you have won\n"),
+          Text("If cards remain in the deck but there are no cards that add up to eleven, you have lost"),
         ],
       ),
     );
   }
 
+  ///Restarts the game
   void restart() {
     if (started && !paused) {
       chosenCard = null;
@@ -288,6 +302,7 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
+  ///Goes to the best times screen
   void gotoBestTimes() {
     if (!game.playing) {
       Navigator.push(
@@ -297,6 +312,7 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
+  ///Tries to save the user's time and shows the won dialog
   void gameWonCallback() async {
     timer.cancel();
     Entry e = new Entry(DateTime.now(), timeDiff.toString().substring(2, 7));
@@ -307,6 +323,7 @@ class _MyHomePageState extends State<MyHomePage> {
     showWinDialog(top10);
   }
 
+  ///Shows the won dialog
   showWinDialog(bool top10) {
     return showDialog<void>(
         context: context,
@@ -342,6 +359,7 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  ///Tries to save the number of cards left and shows the lose dialog
   void gameFailedCallback() async {
     timer.cancel();
     CardCount c = new CardCount(DateTime.now(), game.getCardsLeft());
@@ -352,6 +370,7 @@ class _MyHomePageState extends State<MyHomePage> {
     showFailDialog(top10);
   }
 
+  ///Shows the lose dialog
   showFailDialog(bool top10) {
     return showDialog<void>(
       context: context,
@@ -387,6 +406,7 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  ///Deals with a card press
   void cardPressed(PCard card) {
     if (card.getNum() > 10) {
       faceCardPressed(card);
@@ -395,6 +415,7 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
+  ///Deals with a non face card being pressed - if one is already selected then compares them
   void nonFaceCardPressed(PCard card) {
     if (chosenCard == card) {
       this.setState(() {
@@ -427,6 +448,7 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
+  ///Deals with a face card being pressed - if two are already selected then compares them
   void faceCardPressed(PCard card) {
     if (chosenFaceCard2 == card) {
       this.setState(() {

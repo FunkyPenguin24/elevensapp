@@ -1,3 +1,4 @@
+///Holds data relating to the playing cards
 class PCard {
 
   static final int DIAMOND = 1;
@@ -5,28 +6,33 @@ class PCard {
   static final int CLUBS = 3;
   static final int SPADE = 4;
 
-  final int num;
-  final int suit;
-  bool played = false;
+  final int num; //number of the card
+  final int suit; //suit of the card
+  bool played = false; //if the card has been played
 
   PCard(this.num, this.suit);
 
+  ///Sets if the card has been played or not to a given value
   void setPlayed(bool b) {
     played = b;
   }
 
+  ///Returns true if the card has been played
   bool hasBeenPlayed() {
     return played;
   }
 
+  ///Returns the number of the card
   int getNum() {
     return num;
   }
 
+  ///Returns the suit of the card
   int getSuit() {
     return suit;
   }
 
+  ///Returns the string equivalent of the card (i.e. Kd or 7h)
   String getCard() {
     String tempNum;
     switch (num) {

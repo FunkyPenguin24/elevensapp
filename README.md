@@ -1,11 +1,15 @@
 # Elevens
 
-A fun card game made in flutter
+Elevens is a fun single-player card game that involves choosing two non face cards that add up to eleven, or a Jack, a Queen and a King.
 
 ## How to play
 
-There is a max of 9 cards on the table at once, and you must match two cards together that add up to 11, or a Jack a Queen and a King.
+The aim of the game is to get rid of all the cards in the deck. You start with two cards face up and seven face down. From then, you can tap the deal button or a face down card to deal a new card. You may have a maximum of nine cards face up at once.
 
-When you get rid of two (or three) cards, all the selected cards are replaced by others in the deck. Once the deck is empty, you win.
+Tap cards to select them and try to make pairs from non-face cards that add up to eleven, with Aces counting as ones. Examples include 7/4, 6/5, 8/3.
 
-If there are cards remaining in the deck but no moves can be made, you have lost the game and must restart.
+Face cards are unique as they can't be paired with non-face cards, but can be selected as a group of three unique face cards (a Jack, Queen and King).
+
+When you select a successful pair or trilogy of cards, they will be replaced with cards from the deck. Try to empty the deck but don't run out of options, if there are no more moves to make then you lose the game.
+
+And be quick, the timer is running!

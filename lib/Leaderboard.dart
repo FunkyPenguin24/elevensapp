@@ -15,7 +15,7 @@ class LeaderboardScreen extends StatefulWidget {
 class LeaderboardScreenState extends State<LeaderboardScreen> with SingleTickerProviderStateMixin {
 
   final tabs = ["Times", "Cards left"];
-  final DataHandler dh;
+  final DataHandler dh; //deals with the loading and saving of data
   TabController tabControl;
 
   LeaderboardScreenState(this.dh);
@@ -53,6 +53,7 @@ class LeaderboardScreenState extends State<LeaderboardScreen> with SingleTickerP
     );
   }
 
+  ///Returns the widget that holds the user's top 10 times
   Widget getTimesWidget() {
     return Padding(
       padding: EdgeInsets.only(left: 8.0, right: 8.0),
@@ -108,6 +109,7 @@ class LeaderboardScreenState extends State<LeaderboardScreen> with SingleTickerP
     );
   }
 
+  ///Returns the user's fewest 10 number of cards left
   Widget getCardsWidget() {
     return Padding(
       padding: EdgeInsets.only(left: 8.0, right: 8.0),

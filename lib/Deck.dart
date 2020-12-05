@@ -2,11 +2,13 @@ import 'dart:math';
 
 import 'Card.dart';
 
+///Simulates a deck of cards
 class Deck {
 
   final List<PCard> cards = new List<PCard>(52);
   int currentCard;
 
+  ///Fills the deck with cards. The deck is generated unshuffled
   void populate() {
     currentCard = 0;
     int index = 0;
@@ -34,6 +36,7 @@ class Deck {
     currentCard = 0;
   }
 
+  ///Deals the top card from the deck
   PCard dealCard() {
     if (currentCard < cards.length) {
       return cards[currentCard++];

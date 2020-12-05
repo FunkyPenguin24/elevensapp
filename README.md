@@ -2,6 +2,8 @@
 
 Elevens is a fun single-player card game that involves choosing two non face cards that add up to eleven, or a Jack, a Queen and a King.
 
+[Now available on Google Play!](https://play.google.com/store/apps/details?id=com.elpackage.elevens)
+
 ## How to play
 
 The aim of the game is to get rid of all the cards in the deck. You start with two cards face up and seven face down. From then, you can tap the deal button or a face down card to deal a new card. You may have a maximum of nine cards face up at once.

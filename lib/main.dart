@@ -84,21 +84,23 @@ class _MyHomePageState extends State<MyHomePage> {
         showUnselectedLabels: true,
         type: BottomNavigationBarType.fixed,
         backgroundColor: Colors.green,
+        fixedColor: Colors.black,
+        unselectedItemColor: Colors.black,
         items: [
           BottomNavigationBarItem(
-            title: Text((paused) ? "Play" : "Pause", style: TextStyle(color: Colors.black)),
+            label: (paused) ? "Play" : "Pause",
             icon: Icon((paused) ? Icons.play_arrow : Icons.pause, color: Colors.black),
           ),
           BottomNavigationBarItem(
-            title: Text("Deal card", style: TextStyle(color: (game.gameCards.contains(null)) ? Colors.black : Colors.blueGrey)),
+            label: "Deal card",
             icon: Icon(Icons.arrow_upward, color: (game.gameCards.contains(null)) ? Colors.black : Colors.blueGrey),
           ),
           BottomNavigationBarItem(
-            title: Text("Restart", style: TextStyle(color: Colors.black)),
+            label: "Restart",
             icon: Icon(Icons.refresh, color: Colors.black),
           ),
           BottomNavigationBarItem(
-            title: Text("Best times", style: TextStyle(color: Colors.black)),
+            label: "Best times",
             icon: Icon(Icons.table_chart, color: Colors.black),
           ),
         ],
@@ -133,7 +135,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   ///Returns the widgets that display the playing cards
   Widget getCardWidget() {
-    List<Widget> listOfWidgets = new List<Widget>();
+    List<Widget> listOfWidgets = [];
 
     listOfWidgets.add(Padding(padding: EdgeInsets.only(top: 16.0)));
 
@@ -226,9 +228,13 @@ class _MyHomePageState extends State<MyHomePage> {
           Text("There may be up to 9 cards on the table at once, when all the cards in the deck are gone you have won\n"),
           Text("If cards remain in the deck but there are no cards that add up to eleven, you have lost\n"),
           Text("These rules can also be found on the pause screen"),
-          FlatButton(
+          TextButton(
             child: Text("Start"),
-            color: Colors.green,
+            //color: Colors.green,
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(Colors.green),
+              foregroundColor: MaterialStateProperty.all(Colors.black),
+            ),
             onPressed: () {
               this.setState(() {
                 started = true;
@@ -333,20 +339,20 @@ class _MyHomePageState extends State<MyHomePage> {
             title: Text("Game won!"),
             content: Text("Congratulations, you beat the game with a time of ${timeDiff.toString().substring(2, 7)}!" + ((top10) ? "\nThat's one of your top 10 best times!" : "\nTry again and see if you can get one of your top 10 times")),
             actions: [
-              FlatButton(
+              TextButton(
                   child: Text("OK"),
                   onPressed: () {
                     Navigator.pop(context);
                   }
               ),
-              FlatButton(
+              TextButton(
                   child: Text("Restart"),
                   onPressed: () {
                     Navigator.pop(context);
                     restart();
                   }
               ),
-              FlatButton(
+              TextButton(
                   child: Text("Best times"),
                   onPressed: () {
                     Navigator.pop(context);
@@ -380,20 +386,20 @@ class _MyHomePageState extends State<MyHomePage> {
           title: Text("Game lost"),
           content: Text("You can make no more moves so you have lost the game with a total of ${game.getCardsLeft()} cards remaining, restart to try again!" + ((top10) ? "\nThat's one of the fewest 10 remaining cards you've got!" : "")),
           actions: [
-            FlatButton(
+            TextButton(
                 child: Text("OK"),
                 onPressed: () {
                   Navigator.pop(context);
                 }
             ),
-            FlatButton(
+            TextButton(
                 child: Text("Restart"),
                 onPressed: () {
                   Navigator.pop(context);
                   restart();
                 }
             ),
-            FlatButton(
+            TextButton(
                 child: Text("Best times"),
                 onPressed: () {
                   Navigator.pop(context);

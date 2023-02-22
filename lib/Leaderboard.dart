@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'DataHandler.dart';
 
@@ -42,6 +43,15 @@ class LeaderboardScreenState extends State<LeaderboardScreen> with SingleTickerP
             tabControl.animateTo(index);
           },
         ),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.privacy_tip_outlined),
+            onPressed: () async {
+              await launchUrl(Uri.parse("https://funkypenguin.dev/projects/policies#elevens"));
+            },
+            tooltip: "Privacy Policy",
+          ),
+        ],
       ),
       body: TabBarView(
         controller: tabControl,

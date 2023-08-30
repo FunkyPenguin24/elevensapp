@@ -5,8 +5,8 @@ import 'Card.dart';
 ///Simulates a deck of cards
 class Deck {
 
-  final List<PCard> cards = new List<PCard>(52);
-  int currentCard;
+  final List<PCard?> cards = List.filled(52, null);
+  int currentCard = 0;
 
   ///Fills the deck with cards. The deck is generated unshuffled
   void populate() {
@@ -25,7 +25,7 @@ class Deck {
   ///This means any card can only be chosen to be swapped once.
   ///For more information on the algorithm see: https://www.i-programmer.info/programming/theory/2744-how-not-to-shuffle-the-kunth-fisher-yates-algorithm.html.
   void shuffle() {
-    PCard tempCard;
+    PCard? tempCard;
     for (int i = 0; i < cards.length; i++) {
       Random r = new Random();
       int randomNum = (i + r.nextInt(52-i)); //gets a random number between i and the number of cards left
@@ -37,7 +37,7 @@ class Deck {
   }
 
   ///Deals the top card from the deck
-  PCard dealCard() {
+  PCard? dealCard() {
     if (currentCard < cards.length) {
       return cards[currentCard++];
     } else {

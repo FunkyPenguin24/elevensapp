@@ -4,11 +4,11 @@ import 'Deck.dart';
 ///Patience (AKA Elevens) is a game about adding up to eleven
 class Patience {
 
-  Deck deck; //deck of cards
-  List<PCard> gameCards; //list of up to 9 cards that are in play
-  bool playing; //if the game is playing
-  bool won; //if the game has been won
-  bool failed; //if the game has been lost
+  Deck deck = new Deck(); //deck of cards
+  List<PCard?> gameCards = List.filled(9, null); //list of up to 9 cards that are in play
+  bool playing = false; //if the game is playing
+  bool won = false; //if the game has been won
+  bool failed = false; //if the game has been lost
   final Function wonCallback; //is called if the user wins
   final Function failCallback; //is called if the user loses
 
@@ -29,13 +29,13 @@ class Patience {
     deck.populate();
     for (int i = 0; i < 9; i++) //shuffles the deck 8 times
       deck.shuffle();
-    gameCards = new List<PCard>(9);
+    gameCards = List.filled(9, null);
   }
 
   ///Starts the game
   void startGame() {
-    gameCards[0] = deck.dealCard();
-    gameCards[1] = deck.dealCard();
+    gameCards[0] = deck.dealCard()!;
+    gameCards[1] = deck.dealCard()!;
     playing = true;
   }
 
@@ -43,7 +43,7 @@ class Patience {
   void playNewCard() {
     for (int i = 0; i < 9; i++) {
       if (gameCards[i] == null) {
-        gameCards[i] = deck.dealCard();
+        gameCards[i] = deck.dealCard()!;
         checkIfFailed();
         return;
       }
@@ -52,7 +52,7 @@ class Patience {
 
   ///Deals a new card from the deck to the given space
   void playNewCardAt(int n) {
-    gameCards[n] = deck.dealCard();
+    gameCards[n] = deck.dealCard()!;
     if (deck.isEmpty()) {
       won = true;
       playing = false;
@@ -75,18 +75,21 @@ class Patience {
   bool canMakeMove() {
     for (int i = 0; i < 9; i++) {
       for (int j = i; j < 9; j++) {
-        if (gameCards[i].getNum() < 11) {
-          if (compareTwoCards(gameCards[i], gameCards[j])) {
+        if (gameCards[i] == null || gameCards[j] == null) {
+          return true; //not all cards played yet
+        }
+        if (gameCards[i]!.getNum() < 11) {
+          if (compareTwoCards(gameCards[i]!, gameCards[j]!)) {
             return true;
           }
         } else { //if face card
           bool jack = false, queen = false, king = false;
           for (int r = 0; r < 9; r++) {
-            if (gameCards[r].getNum() == 11)
+            if (gameCards[r]!.getNum() == 11)
               jack = true;
-            if (gameCards[r].getNum() == 12)
+            if (gameCards[r]!.getNum() == 12)
               queen = true;
-            if (gameCards[r].getNum() == 13)
+            if (gameCards[r]!.getNum() == 13)
               king = true;
             if (jack && queen && king)
               return true;
@@ -98,12 +101,13 @@ class Patience {
   }
 
   ///Gets a card in play from it's equivalent string
-  PCard getCardFromString(String s) {
+  PCard? getCardFromString(String s) {
     for (int i = 0; i < 9; i++) {
-      if (gameCards[i].getCard() == s) {
+      if (gameCards[i] != null && gameCards[i]!.getCard() == s) {
         return gameCards[i];
       }
     }
+    return null;
   }
 
   ///Compares two cards to see if they add up to eleven

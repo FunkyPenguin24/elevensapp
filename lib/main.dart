@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+  MyHomePage({this.title = "Elevens"});
 
   final String title;
 
@@ -37,14 +37,14 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
 
-  Patience game; //handles the game mechanics
-  PCard chosenCard; //currently selected card (Card is already an object in flutter so had to call it PCard)
-  PCard chosenFaceCard1; //currently selected face card
-  PCard chosenFaceCard2; //second currently selected face card
+  late Patience game; //handles the game mechanics
+  PCard? chosenCard; //currently selected card (Card is already an object in flutter so had to call it PCard)
+  PCard? chosenFaceCard1; //currently selected face card
+  PCard? chosenFaceCard2; //second currently selected face card
   bool started = false; //if the game has started
-  DateTime timeStarted; //time the game started
-  Duration timeDiff; //difference between the time started and now
-  Timer timer; //times the game
+  late DateTime timeStarted; //time the game started
+  Duration? timeDiff; //difference between the time started and now
+  late Timer timer; //times the game
   bool top10time = false; //if the user's time is in their top 10
   DataHandler dh = new DataHandler(); //handles loading and saving of data
   bool paused = false; //if the game is paused
@@ -153,7 +153,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         onTap: () {
                           if (!game.won && game.playing && started) {
                             if (game.gameCards[(y*3) + x] != null) {
-                              cardPressed(game.gameCards[(y*3) + x]);
+                              cardPressed(game.gameCards[(y*3) + x]!);
                             } else {
                               this.setState(() {
                                 game.playNewCardAt((y*3) + x);
@@ -162,10 +162,10 @@ class _MyHomePageState extends State<MyHomePage> {
                             }
                           }
                         },
-                        child: Image(image: AssetImage((game.gameCards[(y*3) + x] == null) ? 'assets/cards/cardBackBlue.png' : 'assets/cards/' + game.gameCards[(y*3) + x].getCard() + '.png')),
+                        child: Image(image: AssetImage((game.gameCards.isEmpty || game.gameCards[(y*3) + x] == null) ? 'assets/cards/cardBackBlue.png' : 'assets/cards/' + game.gameCards[(y*3) + x]!.getCard() + '.png')),
                       ),
                       Visibility(
-                        visible: ([chosenCard, chosenFaceCard1, chosenFaceCard2].contains(game.gameCards[(y*3) + x]) && game.gameCards[(y*3) + x] != null),
+                        visible: (game.gameCards.isNotEmpty && [chosenCard, chosenFaceCard1, chosenFaceCard2].contains(game.gameCards[(y*3) + x]) && game.gameCards[(y*3) + x] != null),
                         child: Container(
                           alignment: Alignment.topRight,
                           child: Icon(Icons.select_all, color: Colors.amber),
@@ -440,10 +440,10 @@ class _MyHomePageState extends State<MyHomePage> {
         chosenCard = card;
       });
     } else {
-      bool passed = game.compareTwoCards(chosenCard, card);
+      bool passed = game.compareTwoCards(chosenCard!, card);
       if (passed) {
         this.setState(() {
-          game.playNewCardAt(game.gameCards.indexOf(chosenCard));
+          game.playNewCardAt(game.gameCards.indexOf(chosenCard!));
           game.playNewCardAt(game.gameCards.indexOf(card));
           game.checkIfFailed();
         });
@@ -483,11 +483,11 @@ class _MyHomePageState extends State<MyHomePage> {
         chosenFaceCard2 = card;
       });
     } else {
-      bool passed = game.compareThreeCards(chosenFaceCard1, chosenFaceCard2, card);
+      bool passed = game.compareThreeCards(chosenFaceCard1!, chosenFaceCard2!, card);
       if (passed) {
         this.setState(() {
-          game.playNewCardAt(game.gameCards.indexOf(chosenFaceCard1));
-          game.playNewCardAt(game.gameCards.indexOf(chosenFaceCard2));
+          game.playNewCardAt(game.gameCards.indexOf(chosenFaceCard1!));
+          game.playNewCardAt(game.gameCards.indexOf(chosenFaceCard2!));
           game.playNewCardAt(game.gameCards.indexOf(card));
           game.checkIfFailed();
         });

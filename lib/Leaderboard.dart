@@ -17,7 +17,7 @@ class LeaderboardScreenState extends State<LeaderboardScreen> with SingleTickerP
 
   final tabs = ["Times", "Cards left"];
   final DataHandler dh; //deals with the loading and saving of data
-  TabController tabControl;
+  late TabController tabControl;
 
   LeaderboardScreenState(this.dh);
 
